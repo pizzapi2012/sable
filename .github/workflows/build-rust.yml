@@ -39,13 +39,11 @@ jobs:
       - name: Run Gradle Task
         run: ./gradlew common:buildImages common:buildRustNatives
 
-      - name: Take ownership of the workspace
-        run: sudo chown -R $USER:$USER .
-
-      - name: Commit and Push Changes
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "Automated build rust natives" || echo "No changes to commit"
-          git push
+      - name: Build mod
+        run: ./gradlew build
+        
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        if: github.ref_type == 'tag'
+        with:
+          files: ./neoforge/build/libs/*
