@@ -44,6 +44,5 @@ jobs:
         
       - name: Release
         uses: softprops/action-gh-release@v3
-        if: github.ref_type == 'tag'
         with:
           files: ./neoforge/build/libs/*
