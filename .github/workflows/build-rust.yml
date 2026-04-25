@@ -4,8 +4,9 @@ on:
     paths:
       - 'common/src/main/rust/**'
       - '.github/workflows/build-rust.yml'
+    tags:
+      - "v*.*.*"
   workflow_dispatch:
-
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
