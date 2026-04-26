@@ -32,3 +32,25 @@ jobs:
 
       - name: Execute Gradle build
         run: ./gradlew build
+
+      - name: Rename build files to include SHA
+        run: |
+         SHA=$(git rev-parse --short HEAD)
+         FILENAME=$(ls ./neoforge/build/libs/*.jar | grep -v "sources" | head -n 1)
+         FILENAME2=$(ls ./fabric/build/libs/*.jar | grep -v "sources" | head -n 1)
+         mv -- "$FILENAME" "${FILENAME%.jar}-GIT-$SHA.jar"
+         mv -- "$FILENAME2" "${FILENAME2%.jar}-GIT-$SHA.jar"
+        
+      - name: Upload Neoforge JAR to artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          retention-days: 90
+          path: ./neoforge/build/libs/*-GIT-*.jar
+
+      - name: Upload Fabric JAR to artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          archive: false
+          retention-days: 90
+          path: ./fabric/build/libs/*-GIT-*.jar
